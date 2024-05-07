@@ -1,0 +1,577 @@
+{
+  "navbar": {
+    "search": {
+      "text": "Search..."
+    },
+    "dropdown": {
+      "megamenu": {
+        "text": "Mega Menu",
+        "uicontent": {
+          "title": "UI Components",
+          "list": {
+            "lightbox": "Lightbox",
+            "rangeslider": "Range Slider",
+            "sweetalert": "Sweet Alert",
+            "rating": "Rating",
+            "forms": "Forms",
+            "tables": "Tables",
+            "charts": "Charts"
+          }
+        },
+        "application": {
+          "title": "Applications",
+          "list": {
+            "ecommerce": "Ecommece",
+            "calendar": "Calendar",
+            "email": "Email",
+            "projects": "Projects",
+            "tasks": "Tasks",
+            "contacts": "Contacts"
+          }
+        },
+        "extrapages": {
+          "title": "Extra Pages",
+          "list": {
+            "lightsidebar": "Light Sidebar",
+            "compactsidebar": "Compact Sidebar",
+            "horizontallayout": "Horizontal Layout",
+            "maintenance": "Maintenance",
+            "comingsoon": "Coming Soon",
+            "timeline": "Timeline",
+            "faqs": "FAQs"
+          }
+        }
+      },
+      "site": {
+        "list": {
+          "github": "GitHub",
+          "bitbucket": "Bitbucket",
+          "dribbble": "Dribbble",
+          "dropbox": "Dropbox",
+          "mailchimp": "Mail Chimp",
+          "slack": "Slack"
+        }
+      },
+      "notification": {
+        "badge": "3",
+        "text": "Notifications",
+        "subtext": "View All",
+        "order": {
+          "title": "Your order is placed",
+          "text": "If several languages coalesce the grammar",
+          "time": "3 min ago"
+        },
+        "james": {
+          "title": "James Lemire",
+          "text": "It will seem like simplified English.",
+          "time": "1 hours ago"
+        },
+        "item": {
+          "title": "Your item is shipped",
+          "text": "If several languages coalesce the grammar",
+          "time": "3 min ago"
+        },
+        "salena": {
+          "title": "Salena Layfield",
+          "text": "As a skeptical Cambridge friend of mine occidental.",
+          "time": "1 hours ago"
+        },
+        "button": "View More.."
+      },
+      "henry": {
+        "text": "Henry",
+        "list": {
+          "profile": "Moj Profil",
+          "mywallet": "My Wallet",
+          "settings": "Settings",
+          "lockscreen": "Lock screen",
+          "logout": "Odjava"
+        }
+      }
+    }
+  },
+  "action": {
+    "create": "Dodaj novi",
+    "submit": "Sačuvaj",
+    "cancel": "Odustani",
+    "login": "Prijava",
+    "add_variants": "Dodaj varijante",
+    "edit": "Uredi",
+    "delete": "Obriši",
+    "view": "Pregled",
+    "import": "Uvezi",
+    "forward": "Dalje",
+    "download_sample_xls": "Preuzmi Excel Primer"
+  },
+  "label": {
+    "merchant_name": "Ime",
+    "pib": "PIB",
+    "contact_name": "Kontakt Osoba",
+    "address": "Adresa",
+    "city": "Grad",
+    "phone_number": "Kontakt Telefon",
+    "email": "Email",
+    "password": "Lozinka",
+    "pos_id": "Serijski Broj",
+    "store": "Naziv Objekta",
+    "created_date": "Datum Kreiranja",
+    "updated_date": "Datum Izmene",
+    "active": "Aktivan",
+    "inactive": "Neaktivan",
+    "yes": "Da",
+    "no": "Ne",
+    "ok": "U redu",
+    "upload_image": "Dodaj Fotografiju",
+    "edit_image": "izmeni fotografiju",
+    "select_all_cash_groups": "Označi sve Grupe Kasa",
+    "chooose_pos_group_for_price": "Izaberite kojim grupama kasa želite da dodelite uvežene proizvode",
+    "pos_exist": "Greška, serijski broj već postoji!",
+    "na_meru": "Na Meru",
+    "created_on": "Datum Kreranja",
+    "updated_on": "Datum Izmene",
+    "master": "Master",
+    "action": "Akcije",
+    "edit": "Uredi",
+    "delete": "Obriši",
+    "view": "Pregled proizvoda",
+
+    "show_submit_detail": "Sačuvaj i prebaci izmene na kase.",
+    "show_prepare_detail": "Izmene će biti sačuvane lokalno, a na kase će izmene biti prenete izborom opcije \"Sačuvaj\".",
+
+    "edit_profile": "Uredi profil",
+    "product_id": "ID proizvoda",
+    "product_code": "Šifra Proizvoda",
+    "product_name": "Ime Proizvoda",
+    "unit_of_measure": "Jedinica Mere",
+    "unit_Of_Measure": "Jedinica Mere",
+    "variants": "Varijante",
+    "unit_price": "Cena",
+    "ean": "Barkod",
+    "tax_code": "Poreska Stopa",
+    "upgrades": "Dodaci",
+    "unit_type": "Vrsta Proizvoda",
+    "measure": "Proizvod je na meru",
+    "path": "Putanja",
+    "list": "lista",
+    "welcome_back": "Dobrodošli nazad!",
+    "sign_in_to_continue": "Prijavite se da biste nastavili dalje.",
+    "remember_me": "Zapamti me",
+    "forgot_password": "Zaboravili ste lozinku?",
+    "show": "Prikaži",
+    "entries": "unosa",
+    "products": "Proizvodi",
+    "merchants": "Trgovac",
+    "merchant": "Trgovac",
+    "pos_list": "Lista Kasa",
+    "pos_add": "Dodaj Kasu",
+    "pos_edit": "Uredite Kasu",
+    "pos_group_list": "Grupe Kasa",
+    "pos_group_add_placeholder": "Unesite ime grupe",
+    "pos_group_add": "Dodaj Novu Grupu",
+    "pos_group_edit": "Edit POS Group",
+    "pos_group_product_price_required": "cena je obavezna",
+    "product_list": "Lista proizvoda",
+    "product_add": "Dodaj proizvod",
+    "product_edit": "Uredite proizvod",
+    "product_view": "Pregled Specifikacija Proizvoda",
+
+    "merchant_list": "Lista Trgovaca",
+    "merchant_add": "Dodaj Trgovca",
+    "merchant_edit": "Uredite Trgovca",
+    "merchant_view": "Pregled Trgovca",
+    "personal_info": "Lični podaci",
+    "variant_name": "Naziv varijante",
+    "super_admin": "Super Admin",
+    "type_something": "Unesite podatke",
+    "enter_valid_email": "Unesite Vašu e-mail adresu",
+
+    "please_select_uom": "Izaberite jedinicu mere",
+    "please_select_tax_code": "Izaberite poresku stopu",
+    "product": "Proizvod",
+    "service": "Usluga",
+    "import_wizard": "Alat za uvoz artikala",
+    "does_import_csv_file_contain_header": "Da li tabela sadrži zaglavlje?",
+    "enter_email": "Unesi email",
+    "enter_password": "Unesi lozinku",
+    "reset_password": "Resetuj lozinku",
+    "reset": "Resetuj",
+    "remember_it": "Znaš lozinku",
+    "sign_in_hear": "Prijavi se ovde",
+    "please_select_column": "Izaberi grupu",
+    "search": "Pretraga",
+    "search_place_holder": "Pretraga...",
+    "drop_files_or_click_upload": "Otpustite datoteke ovde ili kliknite da biste ih otpremili.",
+    "group": "Grupa",
+    "last_active": "Poslednja Sinhronizacija",
+    "neveractive": "Nikad",
+    "loading": "Učitavanje...",
+    "remove_file": "Ukloniti datoteku",
+    "cannot_upload_this_type_of_file": "Ne možete da otpremate datoteke ovog tipa.",
+    "file_size_too_big": "Datoteka je prevelika",
+    "max_filesize": "Maksimalna veličina datoteke",
+    "account_types": "Pregled po tipovima računa",
+    "payment_methods": "Pregled po načinima plaćanja",
+    "operators": "Pregled po operaterima",
+    "items": "Pregled po artiklima",
+    "tax_items": "Pregled po poreskim stavkama",
+    "bills": "Računi",
+    "message": "Dodatna Poruka",
+    "pos": "Kase",
+    "prepare": "Pripremi",
+    "save_products_of_draft": "Primeni Pripremljene Izmene",
+    "create_new_pos": "Dodaj Novu Kasu",
+    "create_new_product": "Dodaj Novi Proizvod",
+    "pos_group_view_edit": "Uredi",
+    "pos_group_view_save": "Sačuvaj",
+    "pos_group_view_cancel": "Otkaži",
+    "loading_prices": "učitavanje cena",
+    "hide_prices": "sakriti cene",
+    "product_pos_groups_not_found": "Proizvod nije dodeljen ni jednoj grupi kasa",
+    "folder_structure": "Struktura Foldera",
+    "remove_products_from_draft": "Otkaži Pripremljene Izmene"
+  },
+  "validationerror": {
+    "value_required": "Ovo polje je obavezno",
+    "value_should_be_number": "Ova vrednost treba da bude važeći broj.",
+    "value_invalid": "Ovo polje sadrži nevažeće vrijednosti",
+    "value_PIB_should_be_9_characters": "PIB mora imati 9 cifara.",
+    "valid_email": "Ova vrednost treba da bude važeća e-pošta.",
+    "product_code_missing": "Za neki od proizvoda nedostaje šifra proizvoda",
+    "product_name_missing": "Za neki od proizvoda nedostaje ime proizvoda",
+    "product_price_missing": "Za neki od proizvoda nedostaje cena",
+    "product_unit_of_measure_missing": "Za neki od proizvoda nedostaje jedinica mere",
+    "product_tax_rate_missing": "Za neki od proizvoda nedostaje poreska stopa",
+    "product_tax_rate_invalid": "Za neke od proizvoda porezna stopa nije važeća",
+    "product_price_invalid": "Za neke od proizvoda cijena nije važeća",
+    "password_at_least_6_characters": "Lozinka mora imati najmanje 6 znakova.",
+    "enter_valid_price": "Unesite važeću cenu",
+    "email_required": "Email je obavezan.",
+    "password_required": "Lozinka je obavezna."
+  },
+  "alerts": {
+    "record_create_success": "Artikal je uspešno unet",
+    "record_update_success": "Unos uspešno promenjen",
+    "record_delete_success": "Unos uspešno obrisan",
+    "delete_confirmation_title": "Da li ste sigurni?",
+    "delete_confirmation_text": "Nećete biti u mogućnosti da povratite obrisano!",
+    "delete_confirmation_accept_button_text": "Da, obriši!",
+    "delete_confirmation_cancel_button_text": "Odustani!",
+    "pos_group_products_price_updated": "Cena proizvoda je uspešno ažurirana",
+    "pos_group_product_delete_confirmation": "Da li ste sigurni da želite da uklonite proizvod iz grupe",
+    "pos_group_product_deleted": "Proizvod uspešno uklonjen",
+    "pos_group_pos_deleted": "Kasa uspešno obrisana",
+    "product_draft_saved": "Izmene sačuvane",
+    "product_draft_cleared": "Pripremljene izmene su otkazane",
+    "pos_group_for_product_not_found": "ovaj proizvod nije dostupan ni u jednoj pos grupi.",
+    "pos_details_updated": "Podaci uspešno ažurirani",
+    "something_went_wrong": "Nešto nije u redu",
+    "import_result_title": "Rezultat uvoza",
+    "import_result_text": "",
+    "import_product_ok_button_text": "U redu",
+    "total_inserted_record": "Ukupno uvezenih proizvoda:",
+    "total_updated_record": "Ukupno ažuriranih proizvoda:",
+    "pos_created": "Kasa uspešno kreirana",
+    "pos_updated": "Kasa uspešno ažurirana",
+    "pos_group_created": "Grupa kasa uspešno kreirana",
+    "pos_group_updated": "Grupa kasa uspešno ažurirana",
+    "product_updated": "Artikal je uspešno ažuriran",
+    "pos_group_delete_confirmation_text": "Da li ste sigurni da želite da obrišete grupu ?",
+    "pos_group_deleted_successfully": "Grupa kasa uspešno izbrisana",
+    "merchant_created": "Trgovac je uspešno kreiran",
+    "merchant_updated": "Trgovac uspešno ažuriran",
+    "merchant_delted": "Trgovac uspešno obrisan",
+    "product_code_changed": "Šifra proizvoda se ne može menjati.",
+    "products_in_drafts_updated": "Proizvodi su uspešno ažurirani",
+    "product_image_not_allowed_in_draft": "Važna poruka : Slika proizvoda se ne može pripremiti.",
+    "yes": "Da",
+    "no": "Ne"
+  },
+  "menuitems": {
+    "merchants": {
+      "text": "Trgovci",
+      "list": {
+        "usergrid": "Merchants Grid",
+        "userlist": "Merchants List",
+        "profile": "Profile"
+      }
+    },
+    "pos": {
+      "text": "Kase",
+      "list": {
+        "usergrid": "POS Grid",
+        "userlist": "POS List",
+        "profile": "Profile"
+      }
+    },
+    "pos_group": {
+      "text": "Grupe Kasa",
+      "list": {
+        "usergrid": "POS Group Grid",
+        "userlist": "POS Group List",
+        "profile": "Profile"
+      }
+    },
+    "product": {
+      "text": "Proizvodi",
+      "list": {
+        "usergrid": "Products Grid",
+        "userlist": "Products List",
+        "profile": "Profile"
+      }
+    },
+    "report": {
+      "text": "Izveštaji",
+      "list": {
+        "usergrid": "Products Grid",
+        "userlist": "Products List",
+        "profile": "Profile"
+      }
+    },
+    "menu": {
+      "text": "SADRŽAJ"
+    },
+    "dashboards": {
+      "text": "Dashboards",
+      "badge": "04",
+      "list": {
+        "default": "Default",
+        "saas": "Saas",
+        "crypto": "Crypto",
+        "blog": "Blog"
+      }
+    },
+    "layouts": {
+      "text": "Layouts",
+      "list": {
+        "horizontal": "Horizontal",
+        "lightsidebar": "Light Sidebar",
+        "compactsidebar": "Compact Sidebar",
+        "iconsidebar": "Icons Sidebar",
+        "boxed": "Boxed Layout",
+        "coloredsidebar": "Colored Sidebar",
+        "vertical": "Vertical",
+        "lighttopbar": "Light Topbar",
+        "coloredheader": "Colored Header"
+      }
+    },
+    "apps": {
+      "text": "Apps"
+    },
+    "calendar": {
+      "text": "Calendar"
+    },
+    "chat": {
+      "text": "Chat",
+      "badge": "New"
+    },
+    "filemanager": {
+      "text": "File Manager",
+      "badge": "New"
+    },
+    "ecommerce": {
+      "text": "Ecommerce",
+      "list": {
+        "products": "Products",
+        "productdetail": "Product Detail",
+        "orders": "Orders",
+        "customers": "Customers",
+        "cart": "Cart",
+        "checkout": "Checkout",
+        "shops": "Shops",
+        "addproduct": "Add Product"
+      }
+    },
+    "crypto": {
+      "text": "Crypto",
+      "list": {
+        "wallet": "Wallet",
+        "buy/sell": "Buy/sell",
+        "exchange": "Exchange",
+        "lending": "Lending",
+        "orders": "Orders",
+        "kycapplication": "KYC Application",
+        "icolanding": "ICO Landing"
+      }
+    },
+    "email": {
+      "text": "Email",
+      "list": {
+        "inbox": "Inbox",
+        "reademail": "Read Email",
+        "template": {
+          "text": "Templates",
+          "list": {
+            "basic": "Basic Action",
+            "alert": "Alert Email",
+            "billing": "Billing Email"
+          }
+        }
+      }
+    },
+    "invoices": {
+      "text": "Invoices",
+      "list": {
+        "invoicelist": "Invoice List",
+        "invoicedetail": "Invoice Detail"
+      }
+    },
+    "projects": {
+      "text": "Projects",
+      "list": {
+        "grid": "Projects Grid",
+        "projectlist": "Projects List",
+        "overview": "Project Overview",
+        "create": "Create New"
+      }
+    },
+    "tasks": {
+      "text": "Tasks",
+      "list": {
+        "tasklist": "Task List",
+        "kanban": "Kanban Board",
+        "createtask": "Create Task"
+      }
+    },
+    "contacts": {
+      "text": "Contacts",
+      "list": {
+        "usergrid": "User Grid",
+        "userlist": "User List",
+        "profile": "Profile"
+      }
+    },
+    "blog": {
+      "text": "Blog",
+      "badge": "New",
+      "list": {
+        "bloglist": "Blog List",
+        "grid": "Blog Grid",
+        "detail": "Blog Details"
+      }
+    },
+    "pages": {
+      "text": "Pages"
+    },
+    "authentication": {
+      "text": "Authentication",
+      "badge": "New",
+      "list": {
+        "login": "Login",
+        "login-2": "Login 2",
+        "register": "Register",
+        "register-2": "Register 2",
+        "recoverpwd": "Recover Password",
+        "recoverpwd-2": "Recover Password 2",
+        "lockscreen": "Lock screen",
+        "lockscreen-2": "Lock screen 2",
+        "confirm-mail": "Confirm Mail",
+        "confirm-mail-2": "Confirm Mail 2",
+        "verification": "Email verification",
+        "verification-2": "Email verification 2",
+        "verification-step": "Two step verification",
+        "verification-step-2": "Two step verification 2"
+      }
+    },
+    "utility": {
+      "text": "Utility",
+      "list": {
+        "starter": "Starter Page",
+        "maintenance": "Maintenance",
+        "timeline": "Timeline",
+        "faqs": "FAQs",
+        "pricing": "Pricing",
+        "error404": "Error 404",
+        "error500": "Error 500",
+        "comingsoon": "Coming Soon"
+      }
+    },
+    "components": {
+      "text": "Components"
+    },
+    "uielements": {
+      "text": "UI Elements",
+      "list": {
+        "alerts": "Alerts",
+        "buttons": "Buttons",
+        "cards": "Cards",
+        "carousel": "Carousel",
+        "dropdowns": "Dropdowns",
+        "grid": "Grid",
+        "images": "Images",
+        "modals": "Modals",
+        "rangeslider": "Range Slider",
+        "progressbar": "Progress Bars",
+        "placeholder": "Placeholder",
+        "sweetalert": "Sweet Alert",
+        "tabs": "Tabs & Accordions",
+        "typography": "Typography",
+        "video": "Video",
+        "general": "General",
+        "colors": "Colors",
+        "lightbox": "Lightbox",
+        "cropper": "Image Cropper",
+        "drawer": "Drawer"
+      }
+    },
+    "forms": {
+      "text": "Forms",
+      "badge": "8",
+      "list": {
+        "elements": "Form Elements",
+        "layouts": "Form Layouts",
+        "validation": "Form Validation",
+        "advanced": "Form Advanced",
+        "editor": "Form Editor",
+        "fileupload": "Form File Upload",
+        "repeater": "Form Repeater",
+        "wizard": "Form Wizard",
+        "mask": "Form Mask"
+      }
+    },
+    "tables": {
+      "text": "Tables",
+      "list": {
+        "basic": "Basic Tables",
+        "advanced": "Advanced Table"
+      }
+    },
+    "charts": {
+      "text": "Charts",
+      "list": {
+        "apex": "Apex Charts",
+        "chartjs": "Chartjs Charts",
+        "chartist": "Chartist Charts",
+        "echart": "E Charts"
+      }
+    },
+    "icons": {
+      "text": "Icons",
+      "list": {
+        "boxicons": "Boxicons",
+        "materialdesign": "Material Design",
+        "dripicons": "Dripicons",
+        "fontawesome": "Font Awesome"
+      }
+    },
+    "maps": {
+      "text": "Maps",
+      "list": {
+        "googlemap": "Google Maps",
+        "leafletmap": "Leaflet Maps"
+      }
+    },
+    "multilevel": {
+      "text": "Multi Level",
+      "list": {
+        "level1": {
+          "1": "Level 1.1",
+          "2": "Level 1.2",
+          "level2": {
+            "1": "Level 2.1",
+            "2": "Level 2.2"
+          }
+        }
+      }
+    }
+  }
+}

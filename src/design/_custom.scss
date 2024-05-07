@@ -1,0 +1,149 @@
+@import "~vue-simple-drawer/src/index";
+
+.modal-backdrop {
+  opacity: 0.5;
+}
+
+.modal-header,
+.alert {
+  .close {
+    padding: 0.3rem 1.75rem;
+    background: transparent;
+    border: 0;
+    font-size: 25px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    opacity: 0.4;
+    width: 1em;
+    height: 1em;
+    z-index: 2;
+
+    button {
+      display: none;
+    }
+  }
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.vhd__datepicker__input {
+  height: $input-height !important;
+  line-height: $input-height !important;
+}
+
+.form-check {
+  .custom-control-input {
+    border-radius: 0.25em;
+    float: left;
+    // margin: 3px 3px 3px -19px !important;
+  }
+}
+
+.check-group {
+  input {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    pointer-events: none;
+  }
+}
+
+.vue-simple-drawer {
+  background: $gray-100 !important;
+  color: $gray-800 !important;
+
+  .close-btn {
+    .leftright,
+    .rightleft {
+      width: 20px !important;
+      background-color: $gray-600 !important;
+    }
+  }
+}
+
+body {
+  * {
+    outline: none;
+  }
+}
+
+.b-form-btn-label-control {
+  padding: 0;
+  border: none;
+
+  > .btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+}
+
+/*** Loader ***/
+
+.cloading {
+  position: fixed;
+  z-index: 999;
+  height: 300px !important;
+  width: 300px !important;
+  overflow: hidden;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  //   left: 50%;
+  //   margin-left: -4em;
+}
+
+/* Transparent Overlay */
+.cloading:before {
+  content: "";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.no-cloading {
+  display: none;
+}
+
+body .table.b-table > tfoot > tr > [aria-sort="ascending"],
+body .table.b-table > thead > tr > th[aria-sort="ascending"]:before {
+  opacity: 1;
+}
+body .table.b-table > tfoot > tr > [aria-sort="descending"],
+body #app .table.b-table > thead > tr > th[aria-sort="descending"]:after {
+  opacity: 1;
+}
+
+.fa-edit-merchant-new {
+  content: "\f044";
+  color: red;
+}
+.fa-edit-merchant-new:before {
+  content: "\f044";
+  color: red;
+}
+
+.form-check-custom .custom-control-input {
+  border-radius: 0.25em;
+  float: left;
+  margin: 3px 3px 3px 0px !important;
+}
+
+.custom-checkbox > label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  margin-left: 0.5rem;
+}
