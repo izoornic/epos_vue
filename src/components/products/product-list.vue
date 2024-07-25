@@ -798,7 +798,7 @@ export default {
               this.commonOptionsAll[i][this.form.tax_Code].toString().trim()
             ) {
               case 'A': {
-                this.commonOptionsAll[i][this.form.tax_Code] = 'A'
+                this.commonOptionsAll[i][this.form.tax_Code] = 'А'
                 break
               }
               case 'E': {
@@ -1324,9 +1324,8 @@ export default {
             'validationerror.product_tax_rate_missing'
           )
         }
-
+        else {
         // mapping tax codes
-        if (product['tax_Code']) {
           switch (product['tax_Code']) {
             case 'A': {
               product['tax_Code'] = 'A'
@@ -1345,16 +1344,16 @@ export default {
               break
             }
           }
-        }
-
-        if (
-          product['tax_Code'] &&
+        
+        /*if (
           !['A', 'Г', 'Ђ', 'Е'].includes(product['tax_Code'].trim())
         ) {
+          //console.log('invalid code:' + product['tax_Code'].trim())
           this.invalidColumns['tax_Code'] = this.$t(
             'validationerror.product_tax_rate_invalid'
-          )
-        }
+          ) + ': ' + product['tax_Code'].trim()
+        }*/
+      }
       }
 
       if (Object.keys(this.invalidColumns).length > 0) {
@@ -1868,7 +1867,7 @@ export default {
                 >{{ $t('action.cancel') }}
               </b-button>
               <a
-                :href="`${publicPath}files/Demo.xlsx`"
+                :href="`${publicPath}/files/import.xlsx`"
                 class="btn btn-primary ms-1"
               >
                 <i

@@ -45,11 +45,11 @@ export const menuItems = [
     icon: "mdi mdi-archive-outline",
     isSuperAdmin: false,
   },
-  /*{
+  {
     id: 128,
     label: "menuitems.report.text",
     link: "/report/list",
     icon: "mdi mdi-chart-bar",
     isSuperAdmin: false,
-  },*/
+  },
 ];

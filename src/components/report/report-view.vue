@@ -3,103 +3,140 @@ import Layout from '@/router/layouts/main'
 import PageHeader from '@/components/page-header'
 import appConfig from '@/app.config'
 import axios from '@/axios'
-import { apiUrl, reportURL } from '@/state/helpers'
+import { apiUrl } from '@/state/helpers'
+
 /**
  * Report-View component
  */
 export default {
   page: {
-    title: 'Contact Users Grid',
+    title: 'Zeta ePos',
     meta: [{ name: 'description', content: appConfig.description }],
   },
   components: { Layout, PageHeader },
   data() {
     return {
+      s_date: -1,
+      e_date: -1,
+      posGridData: [],
+      reportData: [],
+      calling_url: '',
+      calling_params: '',
       //   userGridData: userGridData,
       title: `${this.$t('menuitems.report.text')}`,
+
       items: [
         {
-          text: `${this.$t('menuitems.report.text')}`,
-          href: '/report/list',
+          text: `${this.$t('label.report_acc_type_sale_normal')}`,
+          key: 0,
         },
         {
-          text: 'Users Grid',
-          active: true,
+          text: `${this.$t('label.report_acc_type_refund_normal')}`,
+          key: 3,
         },
+        {
+          text: `${this.$t('label.report_acc_type_sale_proforma')}`,
+          key: 1,
+        },
+        {
+          text: `${this.$t('label.report_acc_type_refund_proforma')}`,
+          key: 4,
+        },
+        {
+          text: `${this.$t('label.report_acc_type_sale_advance')}`,
+          key: 2,
+        },
+        {
+          text: `${this.$t('label.report_acc_type_refund_advance')}`,
+          key: 5,
+        }
       ],
-      iframe: {
-        src: '',
-        style: {
-          height: '100%',
-          width: '100%',
-        },
-        wrapperStyle: null,
-      },
     }
   },
 
   mounted() {
-    console.log(this.$route.params.type)
+    this.posGridData[0] = this.$route.params.pos_id;
+    this.setReportTime();
+     
+    console.log(this.$store.state.reports.reportDays, "FILTER DAYS");
     axios.defaults.headers.common = {
       Authorization: `Bearer ${this.$store.state.authapi.user.token}`,
     }
-    this.fetchMerchantDetail()
-    // alert(this.$store.state.authapi.user.merchant_Id);
-    // alert(this.$store.state.merchant.merchants.pib);
 
-    if (this.$route.params.report_type === `account_types`) {
-      this.iframe.src = `${reportURL}/jasperserver/flow.html?_flowId=viewReportFlow&_flowId=viewReportFlow&ParentFolderUri=/reports/Zeta&reportUnit=/reports/Zeta/Tip_Racuna&decorate=no&j_username=jasperadmin&j_password=ZetaJasper1509&pib=${this.$store.state.merchant.merchants.pib}`
-    }
-    if (this.$route.params.report_type === `payment_methods`) {
-      this.iframe.src = `${reportURL}/jasperserver/flow.html?_flowId=viewReportFlow&_flowId=viewReportFlow&ParentFolderUri=/reports/Zeta&reportUnit=/reports/Zeta/Nacin_Placanja&decorate=no&j_username=jasperadmin&j_password=ZetaJasper1509&pib=${this.$store.state.merchant.merchants.pib}`
-    }
-    if (this.$route.params.report_type === `operators`) {
-      this.iframe.src = `${reportURL}/jasperserver/flow.html?_flowId=viewReportFlow&_flowId=viewReportFlow&ParentFolderUri=/reports/Zeta&reportUnit=/reports/Zeta/Operateri&decorate=no&j_username=jasperadmin&j_password=ZetaJasper1509&pib=${this.$store.state.merchant.merchants.pib}`
-    }
-    if (this.$route.params.report_type === `items`) {
-      this.iframe.src = `${reportURL}/jasperserver/flow.html?_flowId=viewReportFlow&_flowId=viewReportFlow&ParentFolderUri=/reports/Zeta&reportUnit=/reports/Zeta/zeta_report_articles&decorate=no&j_username=jasperadmin&j_password=ZetaJasper1509&pib=${this.$store.state.merchant.merchants.pib}`
-    }
-    if (this.$route.params.report_type === `tax_items`) {
-      this.iframe.src = `${reportURL}/jasperserver/flow.html?_flowId=viewReportFlow&_flowId=viewReportFlow&ParentFolderUri=/reports/Zeta&reportUnit=/reports/Zeta/Porezi&decorate=no&j_username=jasperadmin&j_password=ZetaJasper1509&pib=${this.$store.state.merchant.merchants.pib}`
-    }
-    if (this.$route.params.report_type === `bills`) {
-      this.iframe.src = `${reportURL}/jasperserver/flow.html?_flowId=viewReportFlow&_flowId=viewReportFlow&ParentFolderUri=/reports/Zeta&reportUnit=/reports/Zeta/Zurnal&decorate=no&j_username=jasperadmin&j_password=ZetaJasper1509&pib=${this.$store.state.merchant.merchants.pib}`
-    }
-    if (this.$route.params.report_type === `transaction_details`) {
-      const urlParams = new URLSearchParams(window.location.search)
-      const transactionNumber = urlParams.get('param_broj_racuna')
-
-      this.iframe.src = `${reportURL}/jasperserver/flow.html?_flowId=viewReportFlow&reportUnit=%2Freports%2FZeta%2FDetalji_Transakcije&param_broj_racuna=${transactionNumber}&decorate=no&j_username=jasperadmin&j_password=jasperadmin`
-    }
-    this.iframe.style = {
-      position: 'absolute',
-      width: '100%',
-      height: window.innerHeight,
-    }
-    this.iframe.wrapperStyle = {
-      overflow: 'hidden',
-    }
+    this.fetchMerchantReport();
   },
-  methods: {
-    // eslint-disable-next-line no-unused-vars
-    async fetchMerchantDetail() {
-      // this.isBusy = !this.isBusy;
-      let callingurl = ''
-      if (
-        this.$store.state.authapi.user != null &&
-        this.$store.state.authapi.user.merchant_Id == ''
-      ) {
-        callingurl = `${apiUrl}/users/getAll?id=${this.$store.state.authapi.user.user_Id}`
-      } else {
-        callingurl = `${apiUrl}/merchant/getAll?id=${this.$store.state.authapi.user.merchant_Id}`
+  methods: { 
+    setReportTime(){
+      //this.s_date = new Date(this.$store.state.reports.reportDays.startDay).getTime();
+      this.e_date = new Date(this.$store.state.reports.reportDays.endDay).getTime();
+      this.setCallingUrl();
+    },
+    setCallingUrl(){
+      if(this.$route.params.report_type === `account_types`) {
+        this.title += " - " + this.$t('label.account_types');
+        this.calling_url = `${apiUrl}/reports/report1`;
+        this.calling_params = {
+            "from": this.s_date,
+            "to": this.e_date,
+            "tids": this.posGridData,
+            "invTypes":{
+                "list": [
+                    { //Sale normal
+                    "tt": 0,
+                    "it": 0
+                    },
+                    { //Sale ProForma
+                      "tt": 0,
+                      "it": 1  
+                    },
+                    { //Sale Advance
+                      "tt": 0,
+                      "it": 4  
+                    },
+                    { //Refund normal
+                    "tt": 1,
+                    "it": 0
+                    },
+                    { //Refund ProForma
+                      "tt": 1,
+                      "it": 1  
+                    },
+                    { //Refund Advance
+                      "tt": 1,
+                      "it": 4  
+                    }
+              ]
+            }
+        };
+        console.log(this.calling_params);
       }
-      await axios
-        .get(`${callingurl}`)
+      if (this.$route.params.report_type === `payment_methods`) {
+        this.calling_url = '';
+      }
+      if (this.$route.params.report_type === `operators`) {
+        this.calling_url = '';
+      }
+      if (this.$route.params.report_type === `items`) {
+        this.calling_url = '';
+      }
+      if (this.$route.params.report_type === `tax_items`) {
+        this.calling_url = '';
+      }
+      if (this.$route.params.report_type === `bills`) {
+        this.calling_url = '';
+      }
+      if (this.$route.params.report_type === `transaction_details`) {
+        //?!? WTF ?!?
+        this.calling_url = '';
+      }
+    },
+    async fetchMerchantReport(){
+       await axios
+        .post(this.calling_url, this.calling_params)
         .then((response) => {
           var res = JSON.parse(JSON.stringify(response.data))
-          // console.log("res.items", res);
-
-          this.form = res
+          this.reportData = res;
+          console.log(this.reportData);
         })
         .catch((error) => {
           // this.isBusy = !this.isBusy;
@@ -123,21 +160,26 @@ export default {
           }
         })
     },
-  },
+  }
 }
 </script>
 
 <template>
   <Layout>
-    <PageHeader :title="title" :items="items" />
+    <PageHeader :title="title"  />
     <!-- start row -->
     <div class="row">
-      <div id="iframe-wrapper" :style="iframe.wrapperStyle">
-        <iframe
-          :src="iframe.src"
-          :height="iframe.style.height"
-          :width="iframe.style.width"
-        ></iframe>
+       <!-- start col -->
+      <div style="max-width: 370px;">
+       <ul class="list-group">
+       <li 
+          v-for="report in items"
+          :key="report.key"
+          class="list-group-item d-flex justify-content-between align-items-center">
+          {{ report.text }}
+          <span class="badge text-dark"><h5>{{ reportData[report.key] }}</h5></span>
+        </li>
+       </ul>
       </div>
     </div>
     <!-- end row -->

@@ -56,8 +56,8 @@ export default {
   // components: { simplebar },
   mounted() {
     this.value = this.languages.find((x) => x.language === i18n.locale);
-    this.text = this.value.title;
-    this.flag = this.value.flag;
+    //this.text = this.value.title;
+    //this.flag = this.value.flag;
 
     this.username =
       this.$store.state.authapi.user.roleName.toLowerCase() == "merchant"
