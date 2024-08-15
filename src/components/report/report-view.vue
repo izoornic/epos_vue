@@ -18,7 +18,9 @@ export default {
     return {
       s_date: -1,
       e_date: -1,
-      posGridData: [],
+      selected_tids: [],
+      report_type: '',
+
       reportData: [],
       calling_url: '',
       calling_params: '',
@@ -55,10 +57,14 @@ export default {
   },
 
   mounted() {
-    this.posGridData[0] = this.$route.params.pos_id;
+    this.selected_tids = this.$store.state.reports.selectedTids.tids;
+    this.report_type = this.$store.state.reports.reportType.repType;
     this.setReportTime();
      
     console.log(this.$store.state.reports.reportDays, "FILTER DAYS");
+    console.log(this.$store.state.reports.reportType.repType, "REP TYPE");
+    console.log(this.$store.state.reports.selectedTids, "TIDS");
+
     axios.defaults.headers.common = {
       Authorization: `Bearer ${this.$store.state.authapi.user.token}`,
     }
@@ -72,13 +78,13 @@ export default {
       this.setCallingUrl();
     },
     setCallingUrl(){
-      if(this.$route.params.report_type === `account_types`) {
+      if(this.report_type === `account_types`) {
         this.title += " - " + this.$t('label.account_types');
         this.calling_url = `${apiUrl}/reports/report1`;
         this.calling_params = {
             "from": this.s_date,
             "to": this.e_date,
-            "tids": this.posGridData,
+            "tids": this.selected_tids,
             "invTypes":{
                 "list": [
                     { //Sale normal
@@ -110,22 +116,22 @@ export default {
         };
         console.log(this.calling_params);
       }
-      if (this.$route.params.report_type === `payment_methods`) {
+      if (this.report_type === `payment_methods`) {
         this.calling_url = '';
       }
-      if (this.$route.params.report_type === `operators`) {
+      if (this.report_type === `operators`) {
         this.calling_url = '';
       }
-      if (this.$route.params.report_type === `items`) {
+      if (this.report_type === `items`) {
         this.calling_url = '';
       }
-      if (this.$route.params.report_type === `tax_items`) {
+      if (this.report_type === `tax_items`) {
         this.calling_url = '';
       }
-      if (this.$route.params.report_type === `bills`) {
+      if (this.report_type === `bills`) {
         this.calling_url = '';
       }
-      if (this.$route.params.report_type === `transaction_details`) {
+      if (this.report_type === `transaction_details`) {
         //?!? WTF ?!?
         this.calling_url = '';
       }

@@ -15,18 +15,23 @@ import { EventBus } from "@/event-bus";
  */
 export default {
   page: {
-    title: 'Contact Users Grid',
+    title: 'Reports',
     meta: [{ name: 'description', content: appConfig.description }],
   },
   components: { Layout, PageHeader, PagingFilter },
   mixins: [toastMixin, pagingFilterMixin],
+
   data() {
     return {
       posGridData: [],
       title: `${this.$t('menuitems.report.text')}`,
 
+      selected_pos: [],
+
       s_date: '',
       e_date: '',
+
+      r_type: '',
       
       context: null,
 
@@ -38,6 +43,7 @@ export default {
       sortDirection: "desc",
       
       fields: [
+        { key: "select_tid", label: "", sortable: false },
         {
           key: "pos_Id",
           label: this.$t("label.pos_id"),
@@ -53,46 +59,41 @@ export default {
           label: this.$t("label.group"),
           sortable: true,
         },
-        { key: "account_types", label: this.$t("label.report_account_types_heading"), sortable: false },
-        { key: "payment_methods", label: this.$t("label.report_payment_methods_heading"), sortable: false },
-        { key: "operators", label: this.$t("label.report_operators_heading"), sortable: false },
-        { key: "items", label: this.$t("label.report_items_heading"), sortable: false },
-        { key: "tax_items", label: this.$t("label.report_tax_items_heading"), sortable: false },
-        { key: "bills", label: this.$t("label.report_bills_heading"), sortable: false },
       ],
-      
-      //reportGridData: [
-      //  {
-      //    id: 1,
-      //    name: `${this.$t('label.account_types')}`,
-      //    src: '/report/view/account_types',
-      //  },
-      //  {
-      //    id: 2,
-      //    name: `${this.$t('label.payment_methods')}`,
-      //    src: '/report/view/payment_methods',
-      //  },
-      //  {
-      //    id: 3,
-      //    name: `${this.$t('label.operators')}`,
-      //    src: '/report/view/operators',
-      //  },
-      //  {
-      //    id: 4,
-      //    name: `${this.$t('label.items')}`,
-      //    src: '/report/view/items',
-      //  },
-      //  {
-      //    id: 5,
-      //    name: `${this.$t('label.tax_items')}`,
-      //    src: '/report/view/tax_items',
-      //  },
-      //  {
-      //    id: 6,
-      //    name: `${this.$t('label.bills')}`,
-      //    src: '/report/view/bills',
-      //  },
-      //],
+      preselectedReport: "account_types",
+
+      reportTypeOptions:[
+        {
+          value: "account_types",
+          text: this.$t("label.account_types"),
+          disabled: false,
+        },
+        {
+          value: "payment_methods",
+          text: this.$t("label.payment_methods"),
+          disabled: false,
+        },
+        {
+          value: "operators",
+          text: this.$t("label.operators"),
+          disabled: false,
+        },
+        {
+          value: "items",
+          text: this.$t("label.items"),
+          disabled: false,
+        },
+        {
+          value: "tax_items",
+          text: this.$t("label.tax_items"),
+          disabled: false,
+        },
+        {
+          value: "bills",
+          text: this.$t("label.bills"),
+          disabled: false,
+        }
+      ],
     }
   },
   computed: {
@@ -112,8 +113,11 @@ export default {
     this.s_date = new Date(); 
     this.s_date.setDate(this.e_date.getDate() - 1);
     this.s_date.setHours(0, 0, 0, 0);
-    
+    this.r_type = this.preselectedReport;
+
     this.storageReportDays();
+    this.storeReportType();
+    this.storeSelectedTids();
 
     /**
      * For paging management
@@ -160,6 +164,11 @@ export default {
       return (day >= this.s_date && day <= this.e_date) ? 'calendar-info-selected' : ''
     },
 
+    reportTypeOptionSelected(value){
+      this.r_type = value;
+      this.storeReportType();
+    },
+
     startDateSet(sday){
       this.s_date = sday.activeDate;
       this.storageReportDays();
@@ -177,11 +186,37 @@ export default {
       });
     },
 
-    viewReport(pos_Id, r_type){
-        this.$router.push({
-          name: "report-view",
-          params: { report_type: r_type, pos_id: pos_Id },
-        });
+    storeReportType(){
+      this.$store.dispatch("reports/addReportType", { 
+        repType : this.r_type,
+      });
+    },
+
+    storeSelectedTids(){
+      this.$store.dispatch("reports/addSelectedTids", { 
+        tids : this.selected_pos,
+      });
+    },
+
+    addRemTerminalForReport(value){
+      console.log(value);
+    },
+
+    viewReport(){
+      // is there all we need for report selected 
+      if(this.$store.state.reports.reportType.repType === '') {
+        toastMixin.methods.displayToastAlert("Greška, niste izabrali vrstu izveštaja!", "error");
+        return;
+      }
+      if(this.selected_pos.length < 1){
+        toastMixin.methods.displayToastAlert("Morate da odaberete barem jedan terminal!", "error");
+        return;
+      }
+      this.storeSelectedTids();
+
+      this.$router.push({
+        name: "report-view"
+      });
     },
 
     async fetchMerchantDetail() {
@@ -288,9 +323,20 @@ export default {
     <!-- start row -->
     <div class="row">
       <div class="mb-5 p-2">
-        <h4 class="card-title">{{ $t('label.report_time_heding') }}</h4> 
+         
         <b-row>
           <b-col md="auto">
+            <h4 class="card-title">{{ $t('label.report_type_heading') }}</h4>
+            <b-form-select
+              v-model="preselectedReport"
+              class="form-select"
+              @change="reportTypeOptionSelected"
+              id="formrow-inputState"
+              :options="reportTypeOptions"
+            ></b-form-select>
+          </b-col>
+          <b-col md="auto">
+            <h4 class="card-title">{{ $t('label.report_time_heding') }}</h4>
             <b-calendar 
               block
               style="width: 350px"
@@ -332,7 +378,9 @@ export default {
           </b-col>
         </b-row>
       </div>
-
+      <div class="mb-4">
+        <b-button @click="viewReport()" variant="primary" class="ms-1">{{ $t('label.report_show_button_label') }} &nbsp; &nbsp;<i class="fas fa-file-alt"></i></b-button>
+      </div>
 
       <!-- pos col -->
       <div class="col-12">
@@ -342,6 +390,10 @@ export default {
 
             <PagingFilter />
 
+              <b-form-checkbox-group
+                id="checkbox-group-2"
+                v-model="selected_pos"
+              >
             <!-- Table -->
             <div class="table-responsive mb-0">
               <b-table
@@ -378,79 +430,19 @@ export default {
                     </div>
                   </td>
                 </template>
-                <template #cell(account_types)="row">
-                  <span class="font-size-20 contact-links mx-auto my-0 p-0 w-100">
-                    <a
-                        v-tooltip.top="$t('label.account_types')"
-                        role="button"
-                        @click="viewReport(row.item.pos_Id, 'account_types')"
-                        >
-                      <i class="fas fa-file-alt"></i>
-                    </a>
-                    </span>
-                </template>
 
-                <template #cell(payment_methods)="row">
-                  <span class="font-size-20 contact-links mx-auto my-0 p-0 w-100">
-                    <a
-                        v-tooltip.top="$t('label.payment_methods')"
-                        role="button"
-                        @click="viewReport(row.item.pos_Id, 'payment_methods')"
-                        >
-                        <i class="far fa-file-alt"></i>
-                    </a>
-                    </span>
+                <template #cell(select_tid)="row">
+                  <b-form-checkbox 
+                    :id="row.item.pos_Id"
+                    :value="row.item.pos_Id"
+                    ></b-form-checkbox>
                 </template>
                 
-                <template #cell(operators)="row">
-                  <span class="font-size-20 contact-links mx-auto my-0 p-0 w-100">
-                    <a
-                        v-tooltip.top="$t('label.operators')"
-                        role="button"
-                        @click="viewReport(row.item.pos_Id, 'operators')"
-                        >
-                        <i class="fas fa-id-card-alt"></i>
-                    </a>
-                    </span>
-                </template>
-                
-                <template #cell(items)="row">
-                  <span class="font-size-20 contact-links mx-auto my-0 p-0 w-100">
-                    <a
-                        v-tooltip.top="$t('label.items')"
-                        role="button"
-                        @click="viewReport(row.item.pos_Id, 'items')"
-                        >
-                        <i class="far fa-file-code"></i>
-                    </a>
-                    </span>
-                </template>
-                
-                <template #cell(tax_items)="row">
-                  <span class="font-size-20 contact-links mx-auto my-0 p-0 w-100">
-                    <a
-                        v-tooltip.top="$t('label.tax_items')"
-                        role="button"
-                        @click="viewReport(row.item.pos_Id, 'tax_items')"
-                        >
-                        <i class="fas fa-file-powerpoint"></i>
-                    </a>
-                    </span>
-                </template>
-                
-                <template #cell(bills)="row">
-                  <span class="font-size-20 contact-links mx-auto my-0 p-0 w-100">
-                    <a
-                        v-tooltip.top="$t('label.bills')"
-                        role="button"
-                        @click="viewReport(row.item.pos_Id, 'bills')"
-                        >
-                        <i class="far fa-file"></i>
-                    </a>
-                    </span>
-                </template>
                 </b-table>
             </div>
+
+          </b-form-checkbox-group>
+
             <div class="row" v-if="posGridData.length !== 0">
               <div class="col">
                 <div class="dataTables_paginate paging_simple_numbers">
@@ -471,37 +463,7 @@ export default {
         </div>
       </div>
 
-      <!-- start col -->
-      <!-- <div
-        v-for="report in reportGridData"
-        :key="report.id"
-        class="col-xl-3 col-sm-6"
-        style="margin-bottom: 24px"
-      >
-        <div class="card text-center h-100">
-          <div class="card-body pb-0">
-           
-            
-            <h5 class="font-size-15 mb-1">
-              <a href="javascript: void(0);" class="text-dark">{{
-                report.name
-              }}</a>
-            </h5>
-           
-          </div>
-          <div class="card-footer bg-transparent border-top">
-            <div class="contact-links d-flex font-size-20">
-              
-              <div class="flex-fill">
-                <router-link v-tooltip.top="$t('label.view')" :to="report.src">
-                  <i class="bx bx-pie-chart-alt"></i>
-                </router-link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
-      <!-- end col -->
+      <div>Selected: <strong>{{ selected_pos }}</strong></div>
 
     </div>
     <!-- end row -->
