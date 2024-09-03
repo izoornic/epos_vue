@@ -1,13 +1,18 @@
 export const state = {
    reportDays: {
         startDay: '',
-        endDay: ''
+        endDay: '',
+        startTime: '',
+        endTime: ''
    },
    reportType: {
     repType: ''
    },
    selectedTids:{
     tids: []
+   },
+   viewDateP: {
+    vDate: ''
    }
   };
   
@@ -15,6 +20,7 @@ export const state = {
     getReportDays: (state) => state.reportDays, 
     getReportType: (state) => state.reportType,
     getSelectedTids: (state) => state.selectedTids,
+    getViewDate: (state) => state.viewDateP,
   };
   
   export const mutations = {
@@ -27,6 +33,9 @@ export const state = {
     addSelectedTids (state, newValue) {
       state.selectedTids = newValue;
     },
+    addViewDate (state, newValue) {
+      state.viewDateP = newValue;
+    },
   };
   
   export const actions = {
@@ -38,5 +47,8 @@ export const state = {
     },
     addSelectedTids ({commit}, data) {
       commit("addSelectedTids", data);
+    },
+    addViewDate ({commit}, data) {
+      commit("addViewDate", data);
     },
   };

@@ -5,6 +5,8 @@ import appConfig from '@/app.config'
 import axios from '@/axios'
 import { apiUrl } from '@/state/helpers'
 
+import ReportTypeDatePicker from "@/components/report/report-type-date-picker"
+
 /**
  * Report-View component
  */
@@ -13,11 +15,11 @@ export default {
     title: 'Zeta ePos',
     meta: [{ name: 'description', content: appConfig.description }],
   },
-  components: { Layout, PageHeader },
+  components: { Layout, PageHeader, ReportTypeDatePicker },
   data() {
     return {
-      s_date: -1,
-      e_date: -1,
+      s_date_report: -1,
+      e_date_report: -1,
       selected_tids: [],
       report_type: '',
 
@@ -71,19 +73,35 @@ export default {
 
     this.fetchMerchantReport();
   },
+
   methods: { 
+    viewReport(){
+      this.setReportTime();
+      this.fetchMerchantReport();
+    },
+
     setReportTime(){
-      //this.s_date = new Date(this.$store.state.reports.reportDays.startDay).getTime();
-      this.e_date = new Date(this.$store.state.reports.reportDays.endDay).getTime();
+      if(this.$store.state.reports.reportDays.startDay == -1){
+        this.s_date_report = -1;
+      }else{
+        this.s_date_report = Math.floor(new Date(this.$store.state.reports.reportDays.startDay).getTime() / 1000);
+      }
+
+      if(this.$store.state.reports.reportDays.endDay == -1){
+        this.e_date_report = -1;
+      }else{
+        this.e_date_report = Math.floor(new Date(this.$store.state.reports.reportDays.endDay).getTime() / 1000);
+      }
       this.setCallingUrl();
     },
     setCallingUrl(){
+      this.title = `${this.$t('menuitems.report.text')}`;
       if(this.report_type === `account_types`) {
         this.title += " - " + this.$t('label.account_types');
         this.calling_url = `${apiUrl}/reports/report1`;
         this.calling_params = {
-            "from": this.s_date,
-            "to": this.e_date,
+            "from": this.s_date_report,
+            "to": this.e_date_report,
             "tids": this.selected_tids,
             "invTypes":{
                 "list": [
@@ -165,6 +183,7 @@ export default {
             // );
           }
         })
+        window.scrollTo({ top: 0, behavior: "smooth" });
     },
   }
 }
@@ -174,7 +193,7 @@ export default {
   <Layout>
     <PageHeader :title="title"  />
     <!-- start row -->
-    <div class="row">
+    <div class="row mb-5">
        <!-- start col -->
       <div style="max-width: 370px;">
        <ul class="list-group">
@@ -188,6 +207,12 @@ export default {
        </ul>
       </div>
     </div>
+
+    <ReportTypeDatePicker />
+
+    <div class="mb-4">
+        <b-button @click="viewReport()" variant="primary" class="ms-1">{{ $t('label.report_show_button_label') }} &nbsp; &nbsp;<i class="fas fa-file-alt"></i></b-button>
+      </div>
     <!-- end row -->
   </Layout>
 </template>

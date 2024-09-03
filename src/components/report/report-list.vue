@@ -2,6 +2,7 @@
 import Layout from '@/router/layouts/main'
 import PageHeader from '@/components/page-header'
 import appConfig from '@/app.config'
+import ReportTypeDatePicker from "@/components/report/report-type-date-picker"
 
 import axios from '@/axios'
 import toastMixin from "@/mixins/sweetAlertMixin";
@@ -18,7 +19,7 @@ export default {
     title: 'Reports',
     meta: [{ name: 'description', content: appConfig.description }],
   },
-  components: { Layout, PageHeader, PagingFilter },
+  components: { Layout, PageHeader, PagingFilter, ReportTypeDatePicker },
   mixins: [toastMixin, pagingFilterMixin],
 
   data() {
@@ -27,13 +28,6 @@ export default {
       title: `${this.$t('menuitems.report.text')}`,
 
       selected_pos: [],
-
-      s_date: '',
-      e_date: '',
-
-      r_type: '',
-      
-      context: null,
 
       filter: null,
       filterOn: [],
@@ -60,40 +54,6 @@ export default {
           sortable: true,
         },
       ],
-      preselectedReport: "account_types",
-
-      reportTypeOptions:[
-        {
-          value: "account_types",
-          text: this.$t("label.account_types"),
-          disabled: false,
-        },
-        {
-          value: "payment_methods",
-          text: this.$t("label.payment_methods"),
-          disabled: false,
-        },
-        {
-          value: "operators",
-          text: this.$t("label.operators"),
-          disabled: false,
-        },
-        {
-          value: "items",
-          text: this.$t("label.items"),
-          disabled: false,
-        },
-        {
-          value: "tax_items",
-          text: this.$t("label.tax_items"),
-          disabled: false,
-        },
-        {
-          value: "bills",
-          text: this.$t("label.bills"),
-          disabled: false,
-        }
-      ],
     }
   },
   computed: {
@@ -108,15 +68,6 @@ export default {
   },
   mounted() {
 
-    this.e_date = new Date(); 
-    this.e_date.setHours(23, 59, 59, 59);
-    this.s_date = new Date(); 
-    this.s_date.setDate(this.e_date.getDate() - 1);
-    this.s_date.setHours(0, 0, 0, 0);
-    this.r_type = this.preselectedReport;
-
-    this.storageReportDays();
-    this.storeReportType();
     this.storeSelectedTids();
 
     /**
@@ -133,14 +84,6 @@ export default {
      this.showsearchbox = false;
     EventBus.$emit("showsearchbox", this.showsearchbox);
 
-    const css = `
-      .calendar-info-selected {
-        background: #d6f3e9;
-      }`
-    this.styleTag = document.createElement('style');
-    this.styleTag.appendChild(document.createTextNode(css));
-    document.head.appendChild(this.styleTag);
-
     axios.defaults.headers.common = {
       Authorization: `Bearer ${this.$store.state.authapi.user.token}`,
     }
@@ -148,58 +91,13 @@ export default {
     this.fetchData()
   },
 
-  destroyed() {
-    this.styleTag.remove();
-  },
-
   methods: {
     ...layoutMethods,
-    dateClass(ymd) {
-      if(!this.e_date.getMonth) return;
-      this.e_date.setHours(23, 59, 59, 59);
-      const day = new Date(ymd);
-      if(this.s_date > this.e_date){
-          this.e_date = this.s_date;
-        }
-      return (day >= this.s_date && day <= this.e_date) ? 'calendar-info-selected' : ''
-    },
-
-    reportTypeOptionSelected(value){
-      this.r_type = value;
-      this.storeReportType();
-    },
-
-    startDateSet(sday){
-      this.s_date = sday.activeDate;
-      this.storageReportDays();
-    },
-
-    endDateSet(eday){
-      this.e_date = eday.activeDate;
-      this.storageReportDays();
-    },
-
-    storageReportDays(){
-      this.$store.dispatch("reports/addReportDays", { 
-        startDay  : this.s_date,
-        endDay    : this.e_date
-      });
-    },
-
-    storeReportType(){
-      this.$store.dispatch("reports/addReportType", { 
-        repType : this.r_type,
-      });
-    },
 
     storeSelectedTids(){
       this.$store.dispatch("reports/addSelectedTids", { 
         tids : this.selected_pos,
       });
-    },
-
-    addRemTerminalForReport(value){
-      console.log(value);
     },
 
     viewReport(){
@@ -272,7 +170,7 @@ export default {
           var res = JSON.parse(JSON.stringify(response.data));
 
           this.posGridData = res.items;
-          console.log(this.posGridData);
+          //console.log(this.posGridData);
           //this.totalRows = res.count;
           this.isBusy = !this.isBusy;
         })
@@ -322,65 +220,7 @@ export default {
     <PageHeader :title="title" />
     <!-- start row -->
     <div class="row">
-      <div class="mb-5 p-2">
-         
-        <b-row>
-          <b-col md="auto">
-            <h4 class="card-title">{{ $t('label.report_type_heading') }}</h4>
-            <b-form-select
-              v-model="preselectedReport"
-              class="form-select"
-              @change="reportTypeOptionSelected"
-              id="formrow-inputState"
-              :options="reportTypeOptions"
-            ></b-form-select>
-          </b-col>
-          <b-col md="auto">
-            <h4 class="card-title">{{ $t('label.report_time_heding') }}</h4>
-            <b-calendar 
-              block
-              style="width: 350px"
-              locale="sh-SH"
-              readonly="readonly"  
-              start-weekday="1"
-              hide-header=true
-              :date-info-fn="dateClass"
-            ></b-calendar>
-          </b-col>
-          <b-col md="auto">
-            <div style="width: 350px">
-              <div>
-                <label for="start-date-datepicker">{{ $t('label.report_time_start_label') }}</label>
-                  <b-form-datepicker
-                    id="start-date-datepicker"
-                    value-as-date
-                    start-weekday="1" 
-                    locale="sh-SH"
-                    v-model="s_date" 
-                    @context="startDateSet"
-                    class="mb-2"
-                  ></b-form-datepicker>
-                  <p>&nbsp;</p>
-            </div>
-            <div>
-                <label for="end-date-datepicker">{{ $t('label.report_time_end_label') }}</label>
-                  <b-form-datepicker
-                    id="end-date-datepicker" 
-                    value-as-date
-                    start-weekday="1"
-                    locale="sh-SH"
-                    v-model="e_date" 
-                    @context="endDateSet"
-                    class="mb-2"
-                  ></b-form-datepicker>
-            </div>
-            </div>
-          </b-col>
-        </b-row>
-      </div>
-      <div class="mb-4">
-        <b-button @click="viewReport()" variant="primary" class="ms-1">{{ $t('label.report_show_button_label') }} &nbsp; &nbsp;<i class="fas fa-file-alt"></i></b-button>
-      </div>
+      <ReportTypeDatePicker />
 
       <!-- pos col -->
       <div class="col-12">
@@ -463,6 +303,10 @@ export default {
         </div>
       </div>
 
+      <div class="mb-4">
+        <b-button @click="viewReport()" variant="primary" class="ms-1">{{ $t('label.report_show_button_label') }} &nbsp; &nbsp;<i class="fas fa-file-alt"></i></b-button>
+      </div>
+      
       <div>Selected: <strong>{{ selected_pos }}</strong></div>
 
     </div>
