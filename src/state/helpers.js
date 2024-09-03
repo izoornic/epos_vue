@@ -89,3 +89,5 @@ export const ProductMethods = mapActions("product", [
 ]);
 
 export const PagingMethods = mapActions("paging", ["addPaging"]);
+
+export const ReportMethods = mapActions("reports", ["addReportDays"]);

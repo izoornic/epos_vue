@@ -2,73 +2,121 @@
 import Layout from '@/router/layouts/main'
 import PageHeader from '@/components/page-header'
 import appConfig from '@/app.config'
+import ReportTypeDatePicker from "@/components/report/report-type-date-picker"
+
 import axios from '@/axios'
-import { apiUrl } from '@/state/helpers'
+import toastMixin from "@/mixins/sweetAlertMixin";
+import { layoutMethods, layoutComputed, apiUrl } from "@/state/helpers";
+
+import PagingFilter from "@/components/filter/paging-filter";
+import pagingFilterMixin from "@/mixins/pagingFilterMixin";
+import { EventBus } from "@/event-bus";
 /**
  * Reports-List component
  */
 export default {
   page: {
-    title: 'Contact Users Grid',
+    title: 'Reports',
     meta: [{ name: 'description', content: appConfig.description }],
   },
-  components: { Layout, PageHeader },
+  components: { Layout, PageHeader, PagingFilter, ReportTypeDatePicker },
+  mixins: [toastMixin, pagingFilterMixin],
+
   data() {
     return {
-      //   userGridData: userGridData,
+      posGridData: [],
       title: `${this.$t('menuitems.report.text')}`,
-      //   items: [
-      //     {
-      //       text: "Contacts",
-      //       href: "/",
-      //     },
-      //     {
-      //       text: "Users Grid",
-      //       active: true,
-      //     },
-      //   ],
 
-      reportGridData: [
+      selected_pos: [],
+
+      filter: null,
+      filterOn: [],
+
+      sortBy: "pos_Id",
+      sortDesc: true,
+      sortDirection: "desc",
+      
+      fields: [
+        { key: "select_tid", label: "", sortable: false },
         {
-          id: 1,
-          name: `${this.$t('label.account_types')}`,
-          src: '/report/view/account_types',
+          key: "pos_Id",
+          label: this.$t("label.pos_id"),
+          sortable: true,
         },
         {
-          id: 2,
-          name: `${this.$t('label.payment_methods')}`,
-          src: '/report/view/payment_methods',
+          key: "pos_Address",
+          label: this.$t("label.address"),
+          sortable: true,
         },
         {
-          id: 3,
-          name: `${this.$t('label.operators')}`,
-          src: '/report/view/operators',
-        },
-        {
-          id: 4,
-          name: `${this.$t('label.items')}`,
-          src: '/report/view/items',
-        },
-        {
-          id: 5,
-          name: `${this.$t('label.tax_items')}`,
-          src: '/report/view/tax_items',
-        },
-        {
-          id: 6,
-          name: `${this.$t('label.bills')}`,
-          src: '/report/view/bills',
+          key: "posGroupName",
+          label: this.$t("label.group"),
+          sortable: true,
         },
       ],
     }
   },
+  computed: {
+    // ...todoComputed,
+    ...layoutComputed,
+    /**
+     * Total no. of records
+     */
+    rows() {
+      return this.totalRows;
+    },
+  },
   mounted() {
+
+    this.storeSelectedTids();
+
+    /**
+     * For paging management
+     */
+     EventBus.$on("pagingfilterVal", (data) => {
+      this.perPage = data;
+    });
+    //console.log(this.perPage, "THIS PER PAGE")
+
+    /**
+     * For hiding searchbox for POS module
+     */
+     this.showsearchbox = false;
+    EventBus.$emit("showsearchbox", this.showsearchbox);
+
     axios.defaults.headers.common = {
       Authorization: `Bearer ${this.$store.state.authapi.user.token}`,
     }
     this.fetchMerchantDetail()
+    this.fetchData()
   },
+
   methods: {
+    ...layoutMethods,
+
+    storeSelectedTids(){
+      this.$store.dispatch("reports/addSelectedTids", { 
+        tids : this.selected_pos,
+      });
+    },
+
+    viewReport(){
+      // is there all we need for report selected 
+      if(this.$store.state.reports.reportType.repType === '') {
+        toastMixin.methods.displayToastAlert("Greška, niste izabrali vrstu izveštaja!", "error");
+        return;
+      }
+      if(this.selected_pos.length < 1){
+        toastMixin.methods.displayToastAlert("Morate da odaberete barem jedan terminal!", "error");
+        return;
+      }
+      this.storeSelectedTids();
+
+      this.$router.push({
+        name: "report-view"
+      });
+    },
+
     async fetchMerchantDetail() {
       // this.isBusy = !this.isBusy;
       let callingurl = ''
@@ -85,8 +133,7 @@ export default {
         .then((response) => {
           var res = JSON.parse(JSON.stringify(response.data))
           // console.log("res.items", res);
-
-          this.form = res
+          this.form = res         
         })
         .catch((error) => {
           // this.isBusy = !this.isBusy;
@@ -110,6 +157,60 @@ export default {
           }
         })
     },
+    
+    async fetchData() {
+      this.isBusy = !this.isBusy;
+      // alert(this.sortBy + " " + this.sortDirection);
+
+      await axios
+        .get(
+          `${apiUrl}/Pos/GetByMerchant?limit=${this.perPage}&page=${this.currentPage}&sortBy=${this.sortBy}&sortDirection=${this.sortDirection}`
+        )
+        .then((response) => {
+          var res = JSON.parse(JSON.stringify(response.data));
+
+          this.posGridData = res.items;
+          //console.log(this.posGridData);
+          //this.totalRows = res.count;
+          this.isBusy = !this.isBusy;
+        })
+        .catch((error) => {
+          this.isBusy = !this.isBusy;
+
+          // // console.log("error", error);
+          // console.log(error.response);
+
+          if (error.response != undefined && error.response.status === 401) {
+            // this.$router.push("/logout");
+            this.$store.dispatch("authapi/logoutauthapi");
+            this.$router.push("/login");
+          } else if (
+            error.response != undefined &&
+            error.response.status === 400
+          ) {
+            toastMixin.methods.displayToastAlert(error.response.data, "error");
+          } else {
+            toastMixin.methods.displayToastAlert(
+              this.$t("alerts.something_went_wrong"),
+              "error"
+            );
+          }
+        });
+    },
+  },
+  watch: {
+    currentPage: {
+      handler: function () {
+        // this.isBusy = !this.isBusy;
+        this.fetchData();
+      },
+    },
+    // eslint-disable-next-line no-unused-vars
+    perPage: function (val, oldval) {
+      // // console.log("oldval", oldval);
+      this.totalRows = val;
+      this.fetchData();
+    },
   },
 }
 </script>
@@ -117,96 +218,97 @@ export default {
 <template>
   <Layout>
     <PageHeader :title="title" />
-    <!-- <div class="row">
-      <div class="d-flex">
-        <button class="btn btn-success ms-auto mb-2" @click="showModal = true">
-          Add Customer
-        </button>
-      </div>
-    </div> -->
     <!-- start row -->
     <div class="row">
-      <!-- start col -->
-      <div
-        v-for="report in reportGridData"
-        :key="report.id"
-        class="col-xl-3 col-sm-6"
-        style="margin-bottom: 24px"
-      >
-        <div class="card text-center h-100">
-          <div class="card-body pb-0">
-            <!-- <div v-if="!user.image" class="avatar-sm mx-auto mb-4">
-              <span
-                class="avatar-title rounded-circle bg-soft bg-primary text-primary font-size-16"
-                >{{ user.name.charAt(0) }}</span
-              >
-            </div> -->
-            <!-- <div v-if="user.image" class="mb-4">
-              <img
-                class="rounded-circle avatar-sm"
-                :src="`${user.image}`"
-                alt
-              />
-            </div> -->
-            <h5 class="font-size-15 mb-1">
-              <a href="javascript: void(0);" class="text-dark">{{
-                report.name
-              }}</a>
-            </h5>
-            <!-- <p class="text-muted">{{ report.name }}</p> -->
+      <ReportTypeDatePicker />
 
-            <!-- <div>
-              <a
-                href="javascript: void(0);"
-                class="badge bg-primary font-size-11 m-1"
-                >{{ user.projects[0] }}</a
-              >
-              <a
-                href="javascript: void(0);"
-                class="badge bg-primary font-size-11 m-1"
-                >{{ user.projects[1] }}</a
-              >
-              <a
-                href="javascript: void(0);"
-                class="badge bg-primary font-size-11 m-1"
-                >{{ user.projects[2] }}</a
-              >
-            </div> -->
-          </div>
-          <div class="card-footer bg-transparent border-top">
-            <div class="contact-links d-flex font-size-20">
-              <!-- <div class="flex-fill">
-                <a
-                  v-b-tooltip.hover.top
-                  title="Message"
-                  href="javascript: void(0);"
-                >
-                  <i class="bx bx-message-square-dots"></i>
-                </a>
-              </div> -->
-              <div class="flex-fill">
-                <router-link v-tooltip.top="$t('label.view')" :to="report.src">
-                  <i class="bx bx-pie-chart-alt"></i>
-                </router-link>
+      <!-- pos col -->
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">{{ $t('label.report_pos_table_heding') }}</h4> 
 
-                <!--<a v-tooltip.top="$t('label.view')" :href="report.src">
-                  <i class="bx bx-pie-chart-alt"></i>
-                </a>-->
+            <PagingFilter />
+
+              <b-form-checkbox-group
+                id="checkbox-group-2"
+                v-model="selected_pos"
+              >
+            <!-- Table -->
+            <div class="table-responsive mb-0">
+              <b-table
+                class="datatables"
+                :items="posGridData"
+                :fields="fields"
+                :per-page="0"
+                :current-page="currentPage"
+                :sort-by.sync="sortBy"
+                :sort-desc.sync="sortDesc"
+                responsive="sm"
+                :busy="isBusy"
+                :no-local-sorting="true"
+                @head-clicked="headClicked" 
+              >
+                <template #table-busy>
+                  <div class="text-center text-danger my-2">
+                    <b-spinner class="align-middle"></b-spinner>
+                    <strong class="pl-2">{{ $t("label.loading") }}</strong>
+                  </div>
+                </template>
+                <template #top-row v-if="posGridData.length === 0">
+                  <td
+                    :colspan="fields.length"
+                    class="text-center text-danger my-2 col-12"
+                  >
+                    <div class="col-12 align-self-center">
+                      <lottie-animation
+                        ref="anim"
+                        style="height: 400px"
+                        :loop="true"
+                        :animationData="require('@/assets/no-data.json')"
+                      />
+                    </div>
+                  </td>
+                </template>
+
+                <template #cell(select_tid)="row">
+                  <b-form-checkbox 
+                    :id="row.item.pos_Id"
+                    :value="row.item.pos_Id"
+                    ></b-form-checkbox>
+                </template>
+                
+                </b-table>
+            </div>
+
+          </b-form-checkbox-group>
+
+            <div class="row" v-if="posGridData.length !== 0">
+              <div class="col">
+                <div class="dataTables_paginate paging_simple_numbers">
+                  <ul
+                    class="pagination pagination-rounded justify-content-center mt-4"
+                  >
+                    <!-- pagination -->
+                    <b-pagination
+                      v-model="currentPage"
+                      :total-rows="rows"
+                      :per-page="perPage"
+                    ></b-pagination>
+                  </ul>
+                </div>
               </div>
-              <!-- <div class="flex-fill">
-                <a
-                  v-b-tooltip.hover.top
-                  title="Profile"
-                  href="javascript: void(0);"
-                >
-                  <i class="bx bx-user-circle"></i>
-                </a>
-              </div> -->
             </div>
           </div>
         </div>
       </div>
-      <!-- end col -->
+
+      <div class="mb-4">
+        <b-button @click="viewReport()" variant="primary" class="ms-1">{{ $t('label.report_show_button_label') }} &nbsp; &nbsp;<i class="fas fa-file-alt"></i></b-button>
+      </div>
+      
+      <div>Selected: <strong>{{ selected_pos }}</strong></div>
+
     </div>
     <!-- end row -->
   </Layout>

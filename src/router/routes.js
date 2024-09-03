@@ -106,7 +106,7 @@ export default [
     component: () => import("../components/report/report-list"),
   },
   {
-    path: "/report/view/:report_type",
+    path: "/report/view/:report_type/:pos_id",
     name: "report-view",
     meta: { authRequired: true },
     component: () => import("../components/report/report-view"),

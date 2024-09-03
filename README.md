@@ -24,12 +24,12 @@ yarn run build
 yarn run test
 ```
 
-### Lints and fixes files 3
+### Lints and fixes files
 
 ```
 yarn run lint
 ```
 
-### Customize configuration http://127.0.0.1:8080/login
+### Customize configuration
 
 See [Configuration Reference](https://cli.vuejs.org/config/).

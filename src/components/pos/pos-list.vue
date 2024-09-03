@@ -29,10 +29,6 @@ export default {
       title: `${this.$t("label.pos_list")}`,
       items: [
         {
-          text: "Kase",
-          href: "/pos/list",
-        },
-        {
           text: `${this.$t("label.pos_list")}`,
           active: true,
         },
@@ -136,7 +132,7 @@ export default {
     EventBus.$on("pagingfilterVal", (data) => {
       this.perPage = data;
     });
-
+    
     /**
      * For passing bearer token into the API
      */
