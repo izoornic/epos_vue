@@ -223,6 +223,7 @@
                 <label for="start-date-datepicker">{{ $t('label.report_date_start_label') }}</label>
                   <b-form-datepicker
                     id="start-date-datepicker"
+                    calendar-width="330px"
                     value-as-date
                     start-weekday="1" 
                     locale="sh-SH"
@@ -248,6 +249,7 @@
                 <label for="end-date-datepicker">{{ $t('label.report_date_end_label') }}</label>
                 <b-form-datepicker
                   id="end-date-datepicker" 
+                  calendar-width="330px"
                   value-as-date
                   start-weekday="1"
                   locale="sh-SH"
@@ -276,7 +278,7 @@
               <b-calendar 
                 v-else
                 block
-                style="width: 350px"
+                calendar-width="350px"
                 locale="sh-SH"
                 readonly="readonly"  
                 start-weekday="1"

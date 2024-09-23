@@ -307,7 +307,10 @@ export default {
         <b-button @click="viewReport()" variant="primary" class="ms-1">{{ $t('label.report_show_button_label') }} &nbsp; &nbsp;<i class="fas fa-file-alt"></i></b-button>
       </div>
       
-      <div>Selected: <strong>{{ selected_pos }}</strong></div>
+      <div class="mb-4">{{ $t('label.report_selected_tids_title') }}&nbsp;
+         <span v-for="item in selected_pos"
+         :key="item.key" ><strong>{{ item }}</strong>&nbsp; | &nbsp;</span>
+      </div>
 
     </div>
     <!-- end row -->

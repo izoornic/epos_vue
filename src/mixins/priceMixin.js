@@ -28,6 +28,13 @@ const priceMixin = {
 
       return price;
     },
+    formatNumberDispaly(price) {
+      //price = this.addDecimalPoints(price); en-US  sh-SH (123,456.56) | hu-HU (123 456.56)
+      price = price.toFixed(2);
+      price = Number(price);
+
+      return price.toLocaleString('hu-HU');
+    }
   }
 };
 

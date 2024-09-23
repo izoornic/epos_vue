@@ -247,13 +247,19 @@
     "report_items_heading": "Artikli",
     "report_tax_items_heading": "Poreske stavke",
     "report_bills_heading": "Računi",
+    "report_selected_tids_title": "Odabrani terminali:",
 
     "report_acc_type_sale_normal": "Promet prodaja",
     "report_acc_type_sale_proforma": "Profaktura prodaja",
     "report_acc_type_sale_advance": "Avans prodaja",
     "report_acc_type_refund_normal": "Promet refundacija",
     "report_acc_type_refund_proforma": "Profaktura refundacija",
-    "report_acc_type_refund_advance": "Avans refundacija"
+    "report_acc_type_refund_advance": "Avans refundacija",
+
+    "report_p_m_table_h_date": "Datum",
+    "report_p_m_table_h_sales": "Prodaja",
+    "report_p_m_table_h_refunds": "Refondacija",
+    "report_p_m_table_h_total": "Ukupno"
   },
   "validationerror": {
     "value_required": "Ovo polje je obavezno",
