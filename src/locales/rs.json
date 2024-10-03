@@ -259,7 +259,9 @@
     "report_p_m_table_h_date": "Datum",
     "report_p_m_table_h_sales": "Prodaja",
     "report_p_m_table_h_refunds": "Refondacija",
-    "report_p_m_table_h_total": "Ukupno"
+    "report_p_m_table_h_total": "Ukupno",
+
+    "report_items_table_h_quantity": "Količina"
   },
   "validationerror": {
     "value_required": "Ovo polje je obavezno",
@@ -315,7 +317,10 @@
     "products_in_drafts_updated": "Proizvodi su uspešno ažurirani",
     "product_image_not_allowed_in_draft": "Važna poruka : Slika proizvoda se ne može pripremiti.",
     "yes": "Da",
-    "no": "Ne"
+    "no": "Ne",
+
+    "report_list_no_selected_terminal": "Morate da odaberete barem jedan terminal!",
+    "report_list_no_selected_report": "Greška, niste izabrali vrstu izveštaja!"
   },
   "menuitems": {
     "merchants": {

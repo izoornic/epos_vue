@@ -103,11 +103,11 @@ export default {
     viewReport(){
       // is there all we need for report selected 
       if(this.$store.state.reports.reportType.repType === '') {
-        toastMixin.methods.displayToastAlert("Greška, niste izabrali vrstu izveštaja!", "error");
+        toastMixin.methods.displayToastAlert(this.$t("alerts.report_list_no_selected_report"), "error");
         return;
       }
       if(this.selected_pos.length < 1){
-        toastMixin.methods.displayToastAlert("Morate da odaberete barem jedan terminal!", "error");
+        toastMixin.methods.displayToastAlert(this.$t("alerts.report_list_no_selected_terminal"), "error");
         return;
       }
       this.storeSelectedTids();
@@ -171,7 +171,7 @@ export default {
 
           this.posGridData = res.items;
           //console.log(this.posGridData);
-          //this.totalRows = res.count;
+          this.totalRows = res.count;
           this.isBusy = !this.isBusy;
         })
         .catch((error) => {
@@ -202,6 +202,7 @@ export default {
     currentPage: {
       handler: function () {
         // this.isBusy = !this.isBusy;
+        console.log(this.currentPage, "WATCHER CurrentOage");
         this.fetchData();
       },
     },
