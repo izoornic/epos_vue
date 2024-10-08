@@ -17,6 +17,8 @@ export default {
             selected_tids: [],
 
             reportData:[],
+            kasiri:[],
+            buysyLoad: true,
             
             fields: [
                 {
@@ -66,15 +68,21 @@ export default {
         this.fetchMerchantReport();
     },
 
-    computed: {
-        sortedReport(){
+    /* computed: {
+        sortedReport(kasir){
             return this.reportData.slice().sort(function(a, b) {
                 return a.index - b.index;
             });
         }
-    },
+    }, */
 
     methods: { 
+        sortedReport(kasir_arr){
+            return kasir_arr.slice().sort(function(a, b) {
+                return a.index - b.index;
+            });
+        },
+
         setReportTime(){
             if(this.$store.state.reports.reportDays.startDay == -1){
                 this.s_date_report = -1;
@@ -91,7 +99,7 @@ export default {
         },
 
         setCallingUrl(){
-            this.calling_url = `${apiUrl}/reports/report2`;
+            this.calling_url = `${apiUrl}/reports/report3`;
             this.calling_params = {
                 "from": this.s_date_report,
                 "to": this.e_date_report,
@@ -101,25 +109,42 @@ export default {
         },
 
         async fetchMerchantReport(){
-            this.isBusy = !this.isBusy;
+            this.buysyLoad = true;
         await axios
             .post(this.calling_url, this.calling_params)
             .then((response) => {
                 var res = JSON.parse(JSON.stringify(response.data))
                 this.reportData = [];
-                
-                console.log(`payment_methods`, res);
+                this.kasiri = [];
+                //console.log(`operaters`, res);
                 Object.entries(res).forEach(([key, value]) => {
-                    let name_index = key.split(":")[0];
+                    let inddd = 0;
+                    let key_split = key.split("/");
+                    let kasir_name = key_split[1]
+                    kasir_name = kasir_name.trim();
+                    if(kasir_name.length < 1) kasir_name = "Nedefinisan";
+
+                    let name_index = key_split[0].split(":")[0];
                     let total = value.sales - value.refunds;
-                    //console.log(this.pay_metod[name_index]);
-                    this.reportData.push( {index:name_index, name:this.pay_metod[name_index], sales:this.formatNumberDispaly(value.sales), refunds:this.formatNumberDispaly(value.refunds), total:this.formatNumberDispaly(total)});
+                    
+                    if(!this.kasiri.includes(kasir_name)){
+                        this.kasiri.push(kasir_name);
+                        inddd = this.kasiri.indexOf(kasir_name);
+                        this.reportData[inddd] = [];
+                    }
+                    inddd = this.kasiri.indexOf(kasir_name);
+                    this.reportData[inddd].push( {index:name_index, name:this.pay_metod[name_index], sales:this.formatNumberDispaly(value.sales), refunds:this.formatNumberDispaly(value.refunds), total:this.formatNumberDispaly(total)});
                 });
-                this.reportData = this.sortedReport;
-                console.log(this.reportData);
-                this.isBusy = !this.isBusy;
+
+                
+                Object.entries(this.reportData).forEach(([key, value]) => {
+                    this.reportData[key] = this.sortedReport(value);
+                });
+
+                //this.reportData = this.sortedReport;
+                this.buysyLoad = !this.buysyLoad;
             }).catch((error) => {
-                this.isBusy = !this.isBusy;
+                this.buysyLoad = !this.buysyLoad;
 
             // console.log("error", error);
             // console.log(error.response);
@@ -150,28 +175,38 @@ export default {
           <div class="col-12">
             <div class="card">
               <div class="card-body">
-                  <div class="table-responsive mb-0">
-                    <b-table
-                      class="datatables"
-                      :items="reportData"
-                      :fields="fields"
-                      responsive="sm"
-                      :busy="isBusy"
-                      @head-clicked="headClicked"
-                    >
-                        <template #table-busy>
-                          <div class="text-center text-danger my-2">
-                            <b-spinner class="align-middle"></b-spinner>
-                            <strong class="pl-2">&nbsp;{{ $t("label.loading") }}</strong>
-                          </div>
-                        </template>
-                        <template #top-row v-if="reportData.length === 0">
+                <div v-if="buysyLoad">
+                    <div class="text-center text-danger my-2">
+                        <b-spinner class="align-middle"></b-spinner>
+                        <strong class="pl-2">&nbsp;{{ $t("label.loading") }}</strong>
+                    </div>
+                </div>
+
+                <div v-for="(kasir, index) in kasiri" :key="kasir.key">
+                    <h3 class="mt-2">{{ kasir }}</h3>
+                    <div class="table-responsive mb-0">
+                        <b-table
+                        class="datatables"
+                        :items="reportData[index]"
+                        :fields="fields"
+                        responsive="sm"
+                        :busy="buysyLoad"
+                        @head-clicked="headClicked"
+                        >
+                            <template #table-busy>
                             <div class="text-center text-danger my-2">
-                            <b-spinner class="align-middle"></b-spinner>
-                            <strong class="pl-2">&nbsp;{{ $t("label.loading") }}</strong>
-                          </div>
-                        </template>
-                    </b-table>
+                                <b-spinner class="align-middle"></b-spinner>
+                                <strong class="pl-2">&nbsp;{{ $t("label.loading") }}</strong>
+                            </div>
+                            </template>
+                            <template #top-row v-if="reportData.length === 0">
+                                <div class="text-center text-danger my-2">
+                                <b-spinner class="align-middle"></b-spinner>
+                                <strong class="pl-2">&nbsp;{{ $t("label.loading") }}</strong>
+                            </div>
+                            </template>
+                        </b-table>
+                    </div>
                 </div>
               </div>
             </div>

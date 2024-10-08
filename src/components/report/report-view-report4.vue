@@ -183,23 +183,14 @@ export default {
                         <template #table-busy>
                           <div class="text-center text-danger my-2">
                             <b-spinner class="align-middle"></b-spinner>
-                            <strong class="pl-2">{{ $t("label.loading") }}</strong>
+                            <strong class="pl-2">&nbsp;{{ $t("label.loading") }}</strong>
                           </div>
                         </template>
                         <template #top-row v-if="reportData.length === 0">
-                          <td
-                            :colspan="fields.length"
-                            class="text-center text-danger my-2 col-12"
-                          >
-                            <div class="col-12 align-self-center">
-                              <lottie-animation
-                                ref="anim"
-                                style="height: 400px"
-                                :loop="true"
-                                :animationData="require('@/assets/no-data.json')"
-                              />
-                            </div>
-                          </td>
+                          <div class="text-center text-danger my-2">
+                            <b-spinner class="align-middle"></b-spinner>
+                            <strong class="pl-2">&nbsp;{{ $t("label.loading") }}</strong>
+                          </div>
                         </template>
                     </b-table>
                 </div>

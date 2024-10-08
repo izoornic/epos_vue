@@ -256,10 +256,19 @@
     "report_acc_type_refund_proforma": "Profaktura refundacija",
     "report_acc_type_refund_advance": "Avans refundacija",
 
+    "report_p_m_table_metod": "Način plaćanja",
     "report_p_m_table_h_date": "Datum",
     "report_p_m_table_h_sales": "Prodaja",
     "report_p_m_table_h_refunds": "Refondacija",
     "report_p_m_table_h_total": "Ukupno",
+
+    "report_p_m_0": "Drugo plaćanje",
+    "report_p_m_1": "Gotovina",
+    "report_p_m_2": "Platna kartica",
+    "report_p_m_3": "Ček",
+    "report_p_m_4": "Prenos na račun",
+    "report_p_m_5": "Vaučer",
+    "report_p_m_6": "Instant plaćanje",
 
     "report_items_table_h_quantity": "Količina"
   },

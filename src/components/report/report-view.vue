@@ -7,6 +7,7 @@ import appConfig from '@/app.config'
 import ReportTypeDatePicker from "@/components/report/report-type-date-picker"
 import ReportViewReport1 from "@/components/report/report-view-report1"
 import ReportViewReport2 from "@/components/report/report-view-report2"
+import ReportViewReport3 from "@/components/report/report-view-report3"
 import ReportViewReport4 from "@/components/report/report-view-report4"
 
 /**
@@ -18,7 +19,7 @@ export default {
     meta: [{ name: 'description', content: appConfig.description }],
   },
 
-  components: { Layout, PageHeader, ReportTypeDatePicker, ReportViewReport1, ReportViewReport2, ReportViewReport4},
+  components: { Layout, PageHeader, ReportTypeDatePicker, ReportViewReport1, ReportViewReport2, ReportViewReport4, ReportViewReport3},
   data() {
     return {
       report_type: '',
@@ -94,7 +95,7 @@ export default {
       </div>
 
       <div v-if="report_type === `operators`">
-      
+        <ReportViewReport3 :key="componentKey" />
       </div>
        
       <div v-if="report_type === `items`">
